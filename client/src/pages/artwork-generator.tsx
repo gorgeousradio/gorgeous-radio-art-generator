@@ -4,16 +4,40 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { User, Mic, Image as ImageIcon, Download, Eye } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { User, Mic, Image as ImageIcon, Download, Eye, LogOut } from "lucide-react";
 import TextSizeSlider from "@/components/text-size-slider";
 import TextPositionSlider from "@/components/text-position-slider";
 import PresenterSelection from "@/components/presenter-selection";
 import ImageUpload from "@/components/image-upload";
 import ArtworkPreview from "@/components/artwork-preview";
 import CropModal from "@/components/crop-modal";
+import PasswordModal from "@/components/password-modal";
 import { useArtworkGenerator } from "@/hooks/use-artwork-generator";
+import { useAuth } from "@/hooks/use-auth";
+import type { Presenter } from "@shared/schema";
 
 export default function ArtworkGenerator() {
+  const { toast } = useToast();
+  const { isMainAppAuthenticated, authenticateMainApp, logout } = useAuth();
+
+  // Show password modal if not authenticated
+  if (!isMainAppAuthenticated) {
+    return (
+      <PasswordModal
+        isOpen={true}
+        title="Gorgeous Radio Artwork Generator"
+        expectedPassword="radio"
+        onPasswordCorrect={authenticateMainApp}
+      />
+    );
+  }
+
+  return <AuthenticatedArtworkGenerator />;
+}
+
+function AuthenticatedArtworkGenerator() {
+  const { logout } = useAuth();
   const { toast } = useToast();
   const {
     guestName,
@@ -31,6 +55,11 @@ export default function ArtworkGenerator() {
     isGenerating,
     generateArtwork
   } = useArtworkGenerator();
+
+  // Fetch presenters for selection
+  const { data: presenters = [] } = useQuery<Presenter[]>({
+    queryKey: ['/api/presenters'],
+  });
 
   const [showCropModal, setShowCropModal] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -100,13 +129,23 @@ export default function ArtworkGenerator() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="gradient-bg text-white p-4 sticky top-0 z-40">
-        <div className="max-w-md mx-auto">
-          <h1 className="gordita-black text-2xl md:text-3xl text-center mb-2">
-            GORGEOUS RADIO
-          </h1>
-          <p className="text-center text-sm opacity-90">
-            Artwork Generator
-          </p>
+        <div className="max-w-md mx-auto flex items-center justify-between">
+          <div className="flex-1">
+            <h1 className="gordita-black text-2xl md:text-3xl text-center mb-2">
+              GORGEOUS RADIO
+            </h1>
+            <p className="text-center text-sm opacity-90">
+              Artwork Generator
+            </p>
+          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={logout}
+            className="text-white hover:text-white hover:bg-white/20 p-2"
+          >
+            <LogOut className="w-4 h-4" />
+          </Button>
         </div>
       </header>
 
@@ -133,8 +172,13 @@ export default function ArtworkGenerator() {
             Select Presenter
           </Label>
           <PresenterSelection
-            selected={selectedPresenter}
-            onSelect={setSelectedPresenter}
+            selected={selectedPresenter?.name || ''}
+            onSelect={(presenterName) => {
+              // Find the full presenter object and set it
+              const presenter = presenters.find(p => p.name === presenterName);
+              console.log('Selected presenter:', presenter);
+              setSelectedPresenter(presenter || null);
+            }}
           />
         </Card>
 

@@ -7,7 +7,7 @@ export function useArtworkGenerator() {
   const [guestName, setGuestName] = useState("");
   const [textSize, setTextSize] = useState(20);
   const [textPosition, setTextPosition] = useState(83); // Percentage from top (83% = optimal banner position)
-  const [selectedPresenter, setSelectedPresenter] = useState("");
+  const [selectedPresenter, setSelectedPresenter] = useState<Presenter | null>(null);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [croppedImageData, setCroppedImageData] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -35,8 +35,7 @@ export function useArtworkGenerator() {
 
       // Load and draw presenter overlay
       try {
-        const selectedPresenterData = presenters.find(p => p.name === selectedPresenter);
-        const bannerImageUrl = selectedPresenterData?.bannerImageUrl || `/images/presenters/${selectedPresenter}.png`;
+        const bannerImageUrl = selectedPresenter?.bannerImageUrl || `/images/presenters/${selectedPresenter?.name}.png`;
         const presenterImg = await loadImage(bannerImageUrl);
         // Draw presenter overlay at bottom (matching design)
         const overlayHeight = 347; // Based on original design

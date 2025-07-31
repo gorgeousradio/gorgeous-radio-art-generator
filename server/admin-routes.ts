@@ -23,6 +23,12 @@ const upload = multer({
 });
 
 export async function setupAdminRoutes(app: Express) {
+  // Skip database operations if no connection available
+  if (!db) {
+    console.log('Database not available, skipping admin routes setup');
+    return;
+  }
+
   // Ensure upload directories exist
   const uploadsDir = path.join(process.cwd(), 'client/public/images');
   const profilesDir = path.join(uploadsDir, 'profiles');

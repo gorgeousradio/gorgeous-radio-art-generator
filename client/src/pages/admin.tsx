@@ -7,16 +7,37 @@ import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import { Plus, Edit, Trash2, User } from "lucide-react";
+import { Plus, Edit, Trash2, User, LogOut } from "lucide-react";
+import PasswordModal from "@/components/password-modal";
+import { useAuth } from "@/hooks/use-auth";
 import type { Presenter, InsertPresenter } from "@shared/schema";
 
 export default function AdminPage() {
+  const { isAdminAuthenticated, authenticateAdmin } = useAuth();
+
+  // Show password modal if not authenticated
+  if (!isAdminAuthenticated) {
+    return (
+      <PasswordModal
+        isOpen={true}
+        title="Admin Panel"
+        expectedPassword="radioadmin"
+        onPasswordCorrect={authenticateAdmin}
+      />
+    );
+  }
+
+  return <AuthenticatedAdminPage />;
+}
+
+function AuthenticatedAdminPage() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { logout } = useAuth();
   const [editingPresenter, setEditingPresenter] = useState<Presenter | null>(null);
   const [showAddForm, setShowAddForm] = useState(false);
 
-  // Fetch presenters
+  // Fetch presenters - works with development mock data
   const { data: presenters = [], isLoading } = useQuery<Presenter[]>({
     queryKey: ['/api/admin/presenters'],
   });
@@ -134,13 +155,23 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="gradient-bg text-white p-6 sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="gordita-black text-3xl text-center mb-2">
-            GORGEOUS RADIO ADMIN
-          </h1>
-          <p className="text-center text-sm opacity-90">
-            Presenter Management System
-          </p>
+        <div className="max-w-6xl mx-auto flex items-center justify-between">
+          <div className="flex-1">
+            <h1 className="gordita-black text-3xl text-center mb-2">
+              GORGEOUS RADIO ADMIN
+            </h1>
+            <p className="text-center text-sm opacity-90">
+              Presenter Management System
+            </p>
+          </div>
+          <Button
+            variant="ghost"
+            onClick={logout}
+            className="text-white hover:text-white hover:bg-white/20 flex items-center gap-2"
+          >
+            <LogOut className="w-4 h-4" />
+            Logout
+          </Button>
         </div>
       </header>
 

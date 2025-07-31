@@ -5,7 +5,7 @@ interface ArtworkPreviewProps {
   guestName: string;
   textSize: number;
   textPosition: number;
-  selectedPresenter: string;
+  selectedPresenter: any; // Change to accept full presenter object
   croppedImageData: string | null;
 }
 
@@ -61,7 +61,7 @@ export default function ArtworkPreview({
       {/* Presenter overlay */}
       {selectedPresenter && (
         <img
-          src={`/images/presenters/${selectedPresenter}.png`}
+          src={selectedPresenter.bannerImageUrl || `/images/presenters/${selectedPresenter.displayName || selectedPresenter.name || selectedPresenter}.png`}
           alt="Presenter Overlay"
           className="presenter-overlay"
           onError={(e) => {
