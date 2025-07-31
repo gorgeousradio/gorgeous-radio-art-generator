@@ -1,0 +1,197 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(266, 70%, 21%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+  
+  /* Gorgeous Radio Custom Colors */
+  --gorgeous-pink: hsl(266, 70%, 21%);
+  --gorgeous-pink-dark: hsl(266, 75%, 17%);
+  --gorgeous-pink-light: hsl(266, 70%, 96%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(266, 70%, 21%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+}
+
+@font-face {
+  font-family: 'Gordita Black';
+  src: url('/fonts/Gordita-Black.ttf') format('truetype');
+  font-display: swap;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'DM Sans', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .gradient-bg {
+    background: linear-gradient(135deg, var(--gorgeous-pink) 0%, var(--gorgeous-pink-dark) 50%, hsl(266, 75%, 15%) 100%);
+  }
+  
+  .gordita-black {
+    font-family: 'Gordita Black', 'DM Sans', system-ui, sans-serif;
+    font-weight: 900;
+  }
+  
+  .preview-canvas {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 1;
+    margin: 0 auto;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  .presenter-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    z-index: 2;
+    pointer-events: none;
+  }
+  
+  .name-overlay {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    color: white;
+    font-family: 'Gordita Black', 'DM Sans', system-ui, sans-serif;
+    font-weight: 900;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1px;
+    line-height: 1;
+    white-space: nowrap;
+    max-width: 90%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .text-gorgeous-pink {
+    color: var(--gorgeous-pink);
+  }
+  
+  .bg-gorgeous-pink {
+    background-color: var(--gorgeous-pink);
+  }
+  
+  .bg-gorgeous-pink-dark {
+    background-color: var(--gorgeous-pink-dark);
+  }
+  
+  .bg-gorgeous-pink-light {
+    background-color: var(--gorgeous-pink-light);
+  }
+  
+  .border-gorgeous-pink {
+    border-color: var(--gorgeous-pink);
+  }
+  
+  .hover\:bg-gorgeous-pink-dark:hover {
+    background-color: var(--gorgeous-pink-dark);
+  }
+  
+  .focus\:ring-gorgeous-pink:focus {
+    --tw-ring-color: var(--gorgeous-pink);
+  }
+  
+  .focus\:border-gorgeous-pink:focus {
+    border-color: var(--gorgeous-pink);
+  }
+}
+
+@layer utilities {
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .preview-canvas {
+    max-width: 280px;
+  }
+  
+  .modal-content {
+    max-width: 95vw;
+    max-height: 85vh;
+    margin: 1rem;
+  }
+  
+  .crop-container {
+    max-height: 50vh;
+  }
+}
+
+/* Prevent zoom on mobile */
+input[type="text"], 
+input[type="file"], 
+select, 
+textarea {
+  font-size: 16px;
+}
